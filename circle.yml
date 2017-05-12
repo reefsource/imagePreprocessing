@@ -12,7 +12,7 @@ dependencies:
     - aws configure set default.output json
     - $(aws ecr get-login)
     - docker info
-    - pip install boto3 -y
+    - pip install boto3
 
 test:
   override:
