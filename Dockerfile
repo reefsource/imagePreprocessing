@@ -14,8 +14,10 @@ RUN apt-get update \
 	&& apt-get install -y imagemagick
 
 COPY src/image-preprocess-aws.sh /image-preprocess-aws.sh
-COPY src/AdobeDNGConverter.exe /AdobeDNGConverter.exe
-#COPY wine /root/.wine/
+
+# downloaded from s3 by circleci
+COPY libs/AdobeDNGConverter.exe /AdobeDNGConverter.exe
+COPY libs/wine /root/.wine/
 
 RUN chown root /home/xclient
 

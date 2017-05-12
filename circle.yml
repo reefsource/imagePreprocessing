@@ -14,6 +14,9 @@ dependencies:
     - docker info
     - pip install boto3
 
+  post:
+    - aws s3 sync s3://data.coralreefsource.org/libs/ ./libs/
+
 test:
   override:
     - echo "skip"
