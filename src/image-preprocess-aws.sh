@@ -8,20 +8,17 @@ DNG_CONVERTER_PATH="wine /AdobeDNGConverter.exe -l -u"
 # Get the name of the file, remove extenstion
 # fileName=$(echo $1 | awk '{id=index($0,"."); print substr($0,0,id-1)}')
 
-export AWS_ACCESS_KEY_ID=$1
-export AWS_SECRET_ACCESS_KEY=$2
+inputFileName=$1
 
-inputFileName=$3
-
-AWS_PATH=$(dirname $3)
+AWS_PATH=$(dirname $inputFileName)
 FILE_NAME=$(echo "${inputFileName##*/}")
 FILE_NAME=$(echo "${FILE_NAME%.*}")
 
-echo "Analyzing file: $3"
+echo "Analyzing file: $inputFileName"
 echo "AWS path: $AWS_PATH"
 echo "File name: $FILE_NAME"
 
-aws s3 cp $3 ~/$FILE_NAME.GPR
+aws s3 cp $inputFileName ~/$FILE_NAME.GPR
 
 
 cameraModel=$(exiftool -UniqueCameraModel -s ~/$FILE_NAME.GPR | awk '{id=index($0,":"); print substr($0,id+2)}')
@@ -59,5 +56,3 @@ fi
 aws s3 cp ~/$FILE_NAME"_preview.jpg" $AWS_PATH/$FILE_NAME"_preview.jpg"
 aws s3 cp ~/$FILE_NAME"_thumb.tiff" $AWS_PATH/$FILE_NAME"_thumb.tiff"
 aws s3 cp ~/$FILE_NAME.json $AWS_PATH/$FILE_NAME.json
-
-

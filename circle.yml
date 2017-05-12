@@ -1,0 +1,30 @@
+machine:
+  services:
+    - docker
+
+  python:
+    version: 3.5.2
+
+dependencies:
+  pre:
+    - aws --version
+    - aws configure set default.region us-east-1
+    - aws configure set default.output json
+    - $(aws ecr get-login)
+    - docker info
+    - pip install boto3 -y
+
+test:
+  override:
+    - echo "skip"
+
+deployment:
+  production:
+    branch: master
+    owner: reefsource
+    commands:
+      - docker build --tag 078097297037.dkr.ecr.us-east-1.amazonaws.com/image_preprocessor:$CIRCLE_BUILD_NUM .
+      - docker push 078097297037.dkr.ecr.us-east-1.amazonaws.com/image_preprocessor:$CIRCLE_BUILD_NUM
+      - ./bin/deploy.py --image_tag $CIRCLE_BUILD_NUM
+
+

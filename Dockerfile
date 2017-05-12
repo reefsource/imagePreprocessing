@@ -13,9 +13,9 @@ RUN apt-get update \
 	&& apt-get install -y exiftool \
 	&& apt-get install -y imagemagick
 
-COPY image-preprocess-aws.sh /image-preprocess-aws.sh
-COPY AdobeDNGConverter.exe /AdobeDNGConverter.exe
-COPY wine /root/.wine/
+COPY src/image-preprocess-aws.sh /image-preprocess-aws.sh
+COPY src/AdobeDNGConverter.exe /AdobeDNGConverter.exe
+#COPY wine /root/.wine/
 
 RUN chown root /home/xclient
 
