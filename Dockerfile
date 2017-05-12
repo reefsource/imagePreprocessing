@@ -22,3 +22,5 @@ COPY libs/wine /root/.wine/
 RUN chown root /home/xclient
 
 WORKDIR /
+
+ENTRYPOINT ["./image-preprocess-aws.sh"]
