@@ -29,7 +29,7 @@ if [ "$cameraModel" = "$supportedCameraModels" ]; then
     echo "Detected image from $cameraModel camera."
 
     jsonFileName=~/$FILE_NAME'.json'
-    exiftool -json ~/$FILE_NAME > $jsonFileName
+    exiftool -json ~/$FILE_NAME.GPR > $jsonFileName
 
     # Create a DNG file from GoPro RAW
     START=$(date +%s)
