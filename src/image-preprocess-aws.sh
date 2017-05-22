@@ -58,4 +58,4 @@ aws s3 cp ~/$FILE_NAME"_preview.jpg" $AWS_PATH/$FILE_NAME"_preview.jpg"
 aws s3 cp ~/$FILE_NAME"_thumb.tiff" $AWS_PATH/$FILE_NAME"_thumb.tiff"
 aws s3 cp ~/$FILE_NAME.json $AWS_PATH/${FILE_NAME}_stage1.json
 
-curl -H "Content-Type: application/json" -X POST -d '`cat ~/$FILE_NAME.json`' http://coralreefsource.org/api/v1/results/stage1complete/$upload_id/
+curl -H "Content-Type: application/json" -X POST -d '{"json": "`cat ~/$FILE_NAME.json`", "uploaded_file_id":"'${upload_id}'"}' http://coralreefsource.org/api/v1/results/stage1complete/
