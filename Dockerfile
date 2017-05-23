@@ -6,12 +6,13 @@ USER root
 RUN apt-get update && \
     apt-get upgrade -y
 
-RUN apt-get install -y python-pip
-RUN pip install awscli
+RUN apt-get install -y \
+    python-pip \
+    exiftool \
+    imagemagick \
+    jq
 
-RUN apt-get update \
-	&& apt-get install -y exiftool \
-	&& apt-get install -y imagemagick
+RUN pip install awscli
 
 COPY src/image-preprocess-aws.sh /image-preprocess-aws.sh
 
