@@ -8,7 +8,7 @@ import boto3
 class DeploymentManager():
     def __init__(self):
         self.client = boto3.client('ecs')
-        self.cluster = 'reefsource'
+        self.cluster = 'reefsource-workers'
 
     def get_env_variables_by_env_name(self, environment_name):
         '''
