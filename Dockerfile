@@ -1,4 +1,4 @@
-FROM suchja/wine
+FROM hblasins/reefsource-base
 MAINTAINER Henryk Blasinski <hblasins@stanford.edu>
 
 USER root
