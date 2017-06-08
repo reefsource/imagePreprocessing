@@ -21,16 +21,15 @@ echo "File name: $FILE_NAME"
 
 aws s3 cp $inputFileName ~/$FILE_NAME.GPR
 
-
 cameraModel=$(exiftool -UniqueCameraModel -s ~/$FILE_NAME.GPR | awk '{id=index($0,":"); print substr($0,id+2)}')
-
-
 
 if [ "$cameraModel" = "$supportedCameraModels" ]; then
     echo "Detected image from $cameraModel camera."
 
     jsonFileName=~/$FILE_NAME'.json'
     exiftool -json ~/$FILE_NAME.GPR > $jsonFileName
+    jq '.[0]' $jsonFileName > $jsonFileName".tmp"
+    mv $jsonFileName".tmp" $jsonFileName
 
     # Create a DNG file from GoPro RAW
     START=$(date +%s)
@@ -52,6 +51,9 @@ if [ "$cameraModel" = "$supportedCameraModels" ]; then
 
 else
     echo "$cameraModel not supported"
+    # notify server
+
+    exit -1
 fi
 
 aws s3 cp ~/$FILE_NAME"_preview.jpg" $AWS_PATH/$FILE_NAME"_preview.jpg" --acl 'public-read'
