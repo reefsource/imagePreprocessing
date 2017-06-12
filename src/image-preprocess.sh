@@ -22,7 +22,7 @@ if [ "$cameraModel" = "$supportedCameraModels" ]; then
     echo "Detected image from $cameraModel camera."
 
     jsonFileName=$fileName'.json'
-    exiftool -json -c "%+.6f" $1 > $jsonFileName
+    exiftool -json -c "%+.6f" -d "%Y-%m-%dT%H:%M:%S%Z" $1 > $jsonFileName
     jq '.[0]' $jsonFileName > $jsonFileName".tmp"
     mv $jsonFileName".tmp" $jsonFileName
 
