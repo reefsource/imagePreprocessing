@@ -38,27 +38,34 @@ if [ "$cameraModel" = "$supportedCameraModels" ]; then
     echo "Detected image from $cameraModel camera."
 
     jsonFileName=~/$FILE_NAME'.json'
-    exiftool -json ~/$FILE_NAME.GPR > $jsonFileName
+    exiftool -json -c "%+.6f" ~/$FILE_NAME".GPR" > $jsonFileName
     jq '.[0]' $jsonFileName > $jsonFileName".tmp"
     mv $jsonFileName".tmp" $jsonFileName
 
     # Create a DNG file from GoPro RAW
     START=$(date +%s)
     echo -n "Converting GPR to DNG ... "
-    eval $DNG_CONVERTER_PATH ~/$FILE_NAME.GPR
+    eval $DNG_CONVERTER_PATH ~/$FILE_NAME".GPR"
     END=$(date +%s)
     DIFF=$((END - START))
     echo "Done! $DIFF sec"
 
-    # Generate preview and thumbnail images
-    exiftool -ThumbnailTIFF -b ~/$FILE_NAME".dng" > ~/$FILE_NAME"_thumb.tiff"
+    # Generate thumbnail image
+    # For some reason TIFF thumbnails are empty...
+    # exiftool -ThumbnailTIFF -b ~/$FILE_NAME".dng" > ~/$FILE_NAME"_thumb.tiff"
 
-    # For some the preview image is flipped L-R direction
+    # Generate the preview image (1024x768)
     exiftool -PreviewImage -b ~/$FILE_NAME".dng" > ~/$FILE_NAME"_preview.jpg"
-    convert ~/$FILE_NAME"_preview.jpg" -flop ~/$FILE_NAME"_preview.jpg"
+    
+    # Check the orientation of the image.
+    # Flip if necessary. 
+    orientation=$(exiftool -Orientation $inputFileName | awk '{id=index($0,":"); print substr($0,id+2)}')
+    if [ "$orientation" = "Mirror horizontal" ]; then
+        convert $fileName"_preview.jpg" -flop $fileName"_preview.jpg"
+    fi
 
     # Raw DNG file is large ~70MB so we don't want to store it.D
-    # rm $fileName".dng"
+    rm $fileName".dng"
 
 else
     submitError "$cameraModel not supported"
