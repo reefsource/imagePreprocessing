@@ -73,7 +73,7 @@ else
 fi
 
 aws s3 cp ~/$FILE_NAME"_preview.jpg" $AWS_PATH/$FILE_NAME"_preview.jpg" --acl 'public-read'
-aws s3 cp ~/$FILE_NAME"_thumb.tiff" $AWS_PATH/$FILE_NAME"_thumb.tiff" --acl 'public-read'
+# aws s3 cp ~/$FILE_NAME"_thumb.tiff" $AWS_PATH/$FILE_NAME"_thumb.tiff" --acl 'public-read'
 aws s3 cp ~/$FILE_NAME.json $AWS_PATH/${FILE_NAME}_stage1.json
 
 submitResult "`cat ${FILE_NAME}_stage1.json`"
