@@ -14,7 +14,7 @@ RUN apt-get install -y \
 
 RUN pip install awscli
 
-COPY libs/image-preprocess-aws.sh /image-preprocess-aws.sh
+COPY src/image-preprocess-aws.sh /image-preprocess-aws.sh
 
 # downloaded from s3 by circleci
 COPY libs/AdobeDNGConverter.exe /AdobeDNGConverter.exe
