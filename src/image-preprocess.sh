@@ -45,7 +45,7 @@ if [ "$cameraModel" = "$supportedCameraModels" ]; then
     fi
 
     # Raw DNG file is large ~70MB so we don't want to store it.
-    # rm $fileName".dng"
+    rm $fileName".dng"
 
 else
     echo "$cameraModel not supported"
