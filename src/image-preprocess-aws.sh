@@ -19,6 +19,17 @@ echo "Analyzing file: $inputFileName"
 echo "AWS path: $AWS_PATH"
 echo "File name: $FILE_NAME"
 
+function submitResult {
+    jq -n --arg upload_id "$upload_id" --arg stage "stage_1" --arg result "$1" '{uploaded_file_id: $upload_id, stage: $stage, json: $result}' | curl -v \
+        -H "Content-Type: application/json" \
+        -H "Authorization: Token ${AUTH_TOKEN}" \
+        -X POST -d@- http://coralreefsource.org/api/v1/results/submit/
+}
+
+function submitError {
+   submitResult "{\"error\": \"$1\"}"
+}
+
 aws s3 cp $inputFileName ~/$FILE_NAME.GPR
 
 cameraModel=$(exiftool -UniqueCameraModel -s ~/$FILE_NAME.GPR | awk '{id=index($0,":"); print substr($0,id+2)}')
@@ -50,9 +61,7 @@ if [ "$cameraModel" = "$supportedCameraModels" ]; then
     # rm $fileName".dng"
 
 else
-    echo "$cameraModel not supported"
-    # notify server
-
+    submitError "$cameraModel not supported"
     exit -1
 fi
 
@@ -60,7 +69,4 @@ aws s3 cp ~/$FILE_NAME"_preview.jpg" $AWS_PATH/$FILE_NAME"_preview.jpg" --acl 'p
 aws s3 cp ~/$FILE_NAME"_thumb.tiff" $AWS_PATH/$FILE_NAME"_thumb.tiff" --acl 'public-read'
 aws s3 cp ~/$FILE_NAME.json $AWS_PATH/${FILE_NAME}_stage1.json
 
-jq -n --arg upload_id "$upload_id" --arg stage "stage_2" '{uploaded_file_id: $upload_id, stage: $stage}' | curl -v \
-    -H "Content-Type: application/json" \
-    -H "Authorization: Token ${AUTH_TOKEN}" \
-    -X POST -d@- http://coralreefsource.org/api/v1/results/stage1complete/
+submitResult "`cat ${FILE_NAME}_stage1.json`"
