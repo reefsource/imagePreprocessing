@@ -65,7 +65,7 @@ if [ "$cameraModel" = "$supportedCameraModels" ]; then
 
     if [ "$orientation" = "Mirror horizontal" ]; then
         echo "Flipping image orientation"
-        convert $fileName"_preview.jpg" -flop $fileName"_preview.jpg"
+        convert ~/$FILE_NAME"_preview.jpg" -flop ~/$FILE_NAME"_preview.jpg"
     fi
 
     # Raw DNG file is large ~70MB so we don't want to store it.
