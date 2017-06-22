@@ -31,14 +31,14 @@ function submitError {
    exit -1
 }
 
-aws s3 cp $inputFileName ~/$FILE_NAME.GPR
+aws s3 cp $inputFileName ~/$FILE_NAME".GPR"
 
-cameraModel=$(exiftool -UniqueCameraModel -s ~/$FILE_NAME.GPR | awk '{id=index($0,":"); print substr($0,id+2)}')
+cameraModel=$(exiftool -UniqueCameraModel -s ~/$FILE_NAME".GPR" | awk '{id=index($0,":"); print substr($0,id+2)}')
 
 if [ "$cameraModel" = "$supportedCameraModels" ]; then
     echo "Detected image from $cameraModel camera."
 
-    jsonFileName=~/$FILE_NAME'.json'
+    jsonFileName=~/$FILE_NAME".json"
     exiftool -json -c "%+.6f" -d "%Y-%m-%dT%H:%M:%S%Z" ~/$FILE_NAME".GPR" > $jsonFileName
     jq '.[0]' $jsonFileName > $jsonFileName".tmp"
     mv $jsonFileName".tmp" $jsonFileName
@@ -60,7 +60,9 @@ if [ "$cameraModel" = "$supportedCameraModels" ]; then
     
     # Check the orientation of the image.
     # Flip if necessary. 
-    orientation=$(exiftool -Orientation $inputFileName | awk '{id=index($0,":"); print substr($0,id+2)}')
+    orientation=$(exiftool -Orientation ~/$FILE_NAME".GPR" | awk '{id=index($0,":"); print substr($0,id+2)}')
+    echo "Detected orientation: $orientation"
+
     if [ "$orientation" = "Mirror horizontal" ]; then
         echo "Flipping image orientation"
         convert $fileName"_preview.jpg" -flop $fileName"_preview.jpg"
