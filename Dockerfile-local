@@ -16,7 +16,6 @@ RUN pip install awscli
 
 COPY src/image-preprocess.sh /image-preprocess.sh
 
-# downloaded from s3 by circleci
 COPY ./AdobeDNGConverter.exe /AdobeDNGConverter.exe
 COPY ./wine /root/.wine/
 

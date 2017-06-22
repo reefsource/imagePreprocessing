@@ -61,11 +61,12 @@ if [ "$cameraModel" = "$supportedCameraModels" ]; then
     # Flip if necessary. 
     orientation=$(exiftool -Orientation $inputFileName | awk '{id=index($0,":"); print substr($0,id+2)}')
     if [ "$orientation" = "Mirror horizontal" ]; then
+        echo "Flipping image orientation"
         convert $fileName"_preview.jpg" -flop $fileName"_preview.jpg"
     fi
 
-    # Raw DNG file is large ~70MB so we don't want to store it.D
-    rm $fileName".dng"
+    # Raw DNG file is large ~70MB so we don't want to store it.
+    rm ~/$FILE_NAME".dng"
 
 else
     submitError "$cameraModel not supported"

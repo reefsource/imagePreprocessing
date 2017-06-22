@@ -41,6 +41,7 @@ if [ "$cameraModel" = "$supportedCameraModels" ]; then
     # Check the orientation of the image
     orientation=$(exiftool -Orientation $inputFileName | awk '{id=index($0,":"); print substr($0,id+2)}')
     if [ "$orientation" = "Mirror horizontal" ]; then
+        echo "Flipping image orientation"
         convert $fileName"_preview.jpg" -flop $fileName"_preview.jpg"
     fi
 
