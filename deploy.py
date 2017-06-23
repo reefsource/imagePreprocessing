@@ -34,7 +34,8 @@ class DeploymentManager():
             "containerDefinitions": [{
                 "name": task_family,
                 "image": "078097297037.dkr.ecr.us-east-1.amazonaws.com/{task_family}:{image_tag}".format(task_family=task_family, image_tag=image_tag),
-                "memoryReservation": 384,
+                "cpu": 512,
+                "memory": 512,
                 "environment": env_vars,
                 'logConfiguration': {
                     'logDriver': 'awslogs',
